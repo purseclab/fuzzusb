@@ -12,7 +12,7 @@ Please see for the paper and working of the fuzzing:
 * https://github.com/google/syzkaller/blob/master/docs/linux/external_fuzzing_usb.md
 
 #### syzkaller setup
-* syzkaller checkout:
+* syzkaller checkout: `d5696d51924aeb6957c19b616c888f58fe9a3740`
 * apply syzkaller patch: `patch/syzkaller/README`
 * syzkaller rebuild
 ```
@@ -36,6 +36,9 @@ $ apt install python3 usbutils alsa-utils net-tools rsync
 * copy to the image: `state_mgr.py` 
 
 ### Run 
+```
+$ ./run.sh 
+```
 
 NOTE: We will be pushing more soon. 
 
