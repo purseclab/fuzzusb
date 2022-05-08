@@ -1,0 +1,20 @@
+# where to overwrite 
+
+executor/common_usb.h  
+pkg/host/features_linux.go  
+syz-manager/manager.go  
+syz-fuzzer/proc.go  
+pkg/report/report.go  
+syz-manager/rpc.go  
+pkg/rpctype/rpctype.go  
+syscalls_linux.go  
+sys/targets/targets.go  
+syz-fuzzer/workqueue.go
+syz-fuzzer/fuzzer.go  
+sys/linux/fuzzusb.txt  
+sys/linux/socket_vnet.txt  
+sys/linux/sys.txt  
+sys/linux/watch_queue.txt  
+sys/linux/dev_kvm.txt  
+sys/linux/dev_snd_control.txt  
+
