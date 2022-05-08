@@ -12,10 +12,19 @@ Please see for the paper and working of the fuzzing:
 * https://github.com/google/syzkaller/blob/master/docs/linux/external_fuzzing_usb.md
 
 #### syzkaller setup
+* syzkaller checkout:
 * apply syzkaller patch: `patch/syzkaller/README`
 * syzkaller rebuild
+```
+$ ./scripts/build_syz.sh
+```
 
 #### Linux kernel setup
+* kernel symlink setup
+```
+$ cd kernel
+$ ln -s [target_kernel_dir] target
+```
 * apply kernel patch: `patch/kernel/README`
 * kernel rebuild 
 
