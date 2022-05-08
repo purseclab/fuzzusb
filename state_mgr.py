@@ -79,13 +79,13 @@ def c4_dispatch(arg):
             port_num = open(str(arg.split(',')[1]), 'r').read()
 
             #### 2. issue cmd 
-            cmds = ["/root/c4_fuzz", "-s", str(arg.split(',')[0]), "-a", "/dev/ttyGS" + str(port_num.strip()), "-b", str(arg.split(',')[2])]
+            cmds = ["/root/c4_fz", "-s", str(arg.split(',')[0]), "-a", "/dev/ttyGS" + str(port_num.strip()), "-b", str(arg.split(',')[2])]
             output, error = _execute(cmds)
         except Exception as e:
             output = str(e)
         return
 
-    cmds = ["/root/c4_fuzz", "-s", str(arg.split(',')[0]), "-a", str(arg.split(',')[1]), "-b", str(arg.split(',')[2])]
+    cmds = ["/root/c4_fz", "-s", str(arg.split(',')[0]), "-a", str(arg.split(',')[1]), "-b", str(arg.split(',')[2])]
     output, error = _execute(cmds)
 
 
@@ -120,9 +120,9 @@ def c3_dispatch(arg, bus):
     dev_num = get_dev_num(bus)
 
     if len(arg5) == 0:
-        cmds = ["/root/c3_fuzz", "-D", "/dev/bus/usb/" + bus + "/"+ dev_num, "-t", str(types), "-d", str(dir_out), "-i", iterate, "-l", length, "-a", '']
+        cmds = ["/root/c3_fz", "-D", "/dev/bus/usb/" + bus + "/"+ dev_num, "-t", str(types), "-d", str(dir_out), "-i", iterate, "-l", length, "-a", '']
     else:
-        cmds = ["/root/c3_fuzz", "-D", "/dev/bus/usb/" + bus + "/"+ dev_num, "-t", str(types), "-d", str(dir_out), "-i", iterate, "-l", length, "-a", str(arg5)]
+        cmds = ["/root/c3_fz", "-D", "/dev/bus/usb/" + bus + "/"+ dev_num, "-t", str(types), "-d", str(dir_out), "-i", iterate, "-l", length, "-a", str(arg5)]
     output, error = _execute(cmds)
 
 
@@ -131,7 +131,7 @@ def c2_dispatch(arg, bus, intf, alt):
     ### get device number
     dev_num = get_dev_num(bus)
 
-    cmds = ["/root/c2_fuzz", "-D", "/dev/bus/usb/" + bus + "/" + dev_num, "-c", str(arg), "-a", str(intf), "-b", str(alt)]
+    cmds = ["/root/c2_fz", "-D", "/dev/bus/usb/" + bus + "/" + dev_num, "-c", str(arg), "-a", str(intf), "-b", str(alt)]
     output, error = _execute(cmds)
 
 
@@ -155,7 +155,7 @@ def c1_dispatch(arg):
         elif trans == "55":     ### c1 generic mutation at the cur state
             arg0 = arg.split(',')[2]
 
-        cmds = ["/root/c1_fuzz", "-t", str(trans), "-d", str(g_dir), "-a", str(arg0), "-b", str(arg1), "-c", str(arg2)]
+        cmds = ["/root/c1_fz", "-t", str(trans), "-d", str(g_dir), "-a", str(arg0), "-b", str(arg1), "-c", str(arg2)]
         output, error = _execute(cmds)
 
         if trans == "01":
