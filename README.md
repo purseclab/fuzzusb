@@ -26,7 +26,7 @@ $ cd kernel
 $ ln -s [target_kernel_dir] target
 ```
 * apply kernel patch: `patch/kernel/README`
-* kernel rebuild 
+* kernel build with gadget enabled config (e.g., `kernel/config`)
 
 #### disk image setup
 * initial setup within the image
