@@ -1,0 +1,148 @@
+### new USB fuzzer
+
+include <linux/types.h>
+include <uapi/linux/fs.h>
+include <scsi/sg.h>
+include <scsi/scsi.h>
+include <scsi/scsi_ioctl.h>
+include <uapi/linux/blktrace_api.h>
+
+resource fd_sg2[fd_block_trace]
+
+syz_usb_idle()
+
+syz_usb_configfs_hid(dev ptr[in, configfs_attr])
+syz_usb_configfs_hid2(dev ptr[in, configfs_attr])
+syz_usb_trans0_1(gname ptr[in, string[gadget_names]], dev ptr[in, configfs_attr])
+syz_usb_trans1_2(gname ptr[in, string[gadget_names]], config ptr[in, string["configs/c.1"]])
+syz_usb_trans2_3(gname ptr[in, string[gadget_names]], func ptr[in, string[func_names]])
+syz_usb_trans3_4(gname ptr[in, string[gadget_names]], func ptr[in, string[func_names]], config ptr[in, string[config_names]])
+syz_usb_trans4_5(gname ptr[in, string[gadget_names]], dummy ptr[in, string[dummy_names]])
+syz_usb_trans5_4(gname ptr[in, string[gadget_names]])
+syz_usb_trans4_3(gname ptr[in, string[gadget_names]])
+syz_usb_trans3_2(gname ptr[in, string[gadget_names]])
+syz_usb_trans2_1(gname ptr[in, string[gadget_names]])
+syz_usb_trans1_0(gname ptr[in, string[gadget_names]])
+
+idvendors = 0x41e, 0x547, 0x1d6b, 0x525
+idproducts = 0x2801, 0x2235, 0x101, 0xa4a8, 0x104
+bcddevices = 0x100, 0x505, 64
+
+configfs_attr {
+	bcdUSB		flags[usb_versions, int16]
+#	bDeviceClass		const[CLASS, int8]
+	bDeviceClass	const[0, int8]
+#	bDeviceSubClass		const[SUBCLASS, int8]
+#	bDeviceProtocol		const[PROTOCOL, int8]
+#	bMaxPacketSize0		flags[usb_device_max_packet_sizes, int8]
+	idVendor	flags[idvendors, int16]
+	idProduct	flags[idproducts, int16]
+	bcdDevice	flags[bcddevices, int16]
+#	iManufacturer		const[1, int8]
+#	iProduct		const[2, int8]
+#	iSerialNumber		const[3, int8]
+} [packed]
+
+dummy_names = "dummy_udc.0", "dummy_udc.1", "dummy_udc.2", "dummy_udc.3", "dummy_udc.4", "dummy_udc.5", "dummy_udc.6", "dummy_udc.7", "dummy_udc.8", "dummy_udc.9", "dummy_udc.10", "dummy_udc.11", "dummy_udc.12", "dummy_udc.13", "dummy_udc.14", "dummy_udc.15", "dummy_udc.16", "dummy_udc.17", "dummy_udc.18", "dummy_udc.19"
+gadget_names = "acm", "ecm", "ncm", "eem", "hid", "prt", "mass", "rndis", "subset", "midi", "serial", "ss", "lb", "uac1", "uac2"
+func_names = "functions/acm.0", "functions/ecm.0", "functions/ncm.0", "functions/eem.0", "functions/hid.0", "functions/printer.0", "functions/mass_storage.0", "functions/rndis.0", "functions/geth.0", "functions/midi.0", "functions/gser.0", "functions/SourceSink.0", "functions/lb.0", "functions/uac1.0", "functions/uac2.0"
+config_names = "configs/c.1/acm.0", "configs/c.1/ecm.0", "configs/c.1/ncm.0", "configs/c.1/eem.0", "configs/c.1/hid.0", "configs/c.1/printer.0", "configs/c.1/mass_storage.0", "configs/c.1/rndis.0", "configs/c.1/geth.0", "configs/c.1/midi.0", "configs/c.1/gser.0", "configs/c.1/SourceSink.0", "configs/c.1/lb.0", "configs/c.1/uac1.0", "configs/c.1/uac2.0"
+
+open$sg2(file ptr[in, string["/dev/sg2"]], flags const[O_RDWR], mode flags[open_mode]) fd_sg2
+ioctl$sg2(fd fd_sg2, cmd const[SG_IO], arg ptr[in, sg_io_hdr2])
+
+sg_io_hdr2 {
+	interface_id	const[0x53, int32]
+	dxfer_direction	flags[sg_dxfer_direction, int32]
+	cmd_len		len[cmdp, int8]
+	mx_sb_len	int8
+	data		sg_io_hdr_data
+	cmdp		ptr[in, cmdblock]
+	sbp		ptr[out, array[int8]]
+	timeout		int32
+	flags		flags[sg_flags, int32]
+	pack_id		int32[-1:3]
+	usr_ptr		ptr[out, int8]
+	status		const[0, int8]
+	masked_status	const[0, int8]
+	msg_status	const[0, int8]
+	sb_len_wr	const[0, int8]
+	host_status	const[0, int16]
+	driver_status	const[0, int16]
+	resid		const[0, int32]
+	duration	const[0, int32]
+	info		const[0, int32]
+} [packed, size[SG_IO_HDR_SIZE]]
+
+cmdblock {
+	cmd0	flags[scsi_cmd, int8]
+	cmd1	const[0, int8]
+	cmd2	const[0, int8]
+	cmd3	const[0, int8]
+	cmd4	int8
+	cmd5	const[0, int8]
+}
+
+scsi_cmd = 0xa8, 0xa, 0x8, 0x2a, 0xaa, 0x17, 0x35, 0x1b, 0x43, 0x23, 0x44, 0x25, 0x5a, 0x55, 0x15, 0x12
+
+resource fd_hid[fd]
+
+# 1 bytes ??
+report_ptr {
+	cmd	int8
+}
+
+
+open$hid(file ptr[in, string["/dev/hidg0"]], flags const[O_RDWR], mode flags[open_mode]) fd_hid
+open$hid2(file ptr[in, string["/dev/hidg1"]], flags const[O_RDWR], mode flags[open_mode]) fd_hid
+write$hid(fd fd_hid, buf ptr[in, report_ptr], count len[buf])
+read$hid(fd fd_hid, buf buffer[out], count len[buf])
+poll$hid(fds ptr[in, array[pollfd]], nfds len[fds], timeout int32)
+
+resource fd_printer[fd]
+
+pollfd_printer {
+	fd	fd_printer
+	events	flags[pollfd_events, int16]
+	revents	const[0, int16]
+}
+
+## GADGET side
+open$printer2(file ptr[in, string["/dev/g_printer0"]], flags const[O_RDWR], mode flags[open_mode]) fd_printer
+write$printer2(fd fd_printer, buf buffer[in], count len[buf])
+read$printer2(fd fd_printer, buf buffer[out], count len[buf])
+ioctl$printer2(fd fd_printer, cmd flags[ioctl_printer], arg flags[ioctl_printer_status])
+fsync$printer2(fd fd_printer)
+poll$printer2(fds ptr[in, array[pollfd_printer]], nfds len[fds], timeout int32)
+close$printer2(fd fd_printer)
+
+ioctl_printer = 100
+ioctl_printer_status = 0
+
+open$printer2host(file ptr[in, string["/dev/usb/lp0"]], flags const[O_RDWR], mode flags[open_mode]) fd_printer
+
+resource sock_in_ncm[sock]
+
+usb_devnames = "usb0", "usb1", "usb2", "usb3", "usb4", "usb5", "usb6", "usb7", "usb8"
+usb_ips = 0xc0a80102, 0xc0a80103, 0xc0a80104, 0xc0a80105, 0xc0a80106, 0xc0a80107, 0xc0a80109, 0xc0a8010a, 0xc0a8010b, 0xc0a8010c
+
+sockaddr_in_fuzz {
+	family	const[AF_INET, int16]
+	port	sock_port
+	addr	flags[usb_ips, int32be]
+} [size[16]]
+
+socket$ncm_SIOCSIFADDR(domain const[AF_INET], type const[SOCK_DGRAM], proto const[0]) sock_in_ncm
+ioctl$ncm_SIOCSIFADDR(fd sock_in_ncm, cmd const[SIOCSIFADDR], arg ptr[inout, ifreq_dev_t[usb_devnames, sockaddr_in_fuzz]])
+
+resource fd_acm[fd]
+open$acm_gadget(file ptr[in, string["/dev/ttyGS0"]], flags const[O_RDWR], mode flags[open_mode]) fd_acm
+open$acm_host(file ptr[in, string["/dev/ttyACM0"]], flags const[O_RDWR], mode flags[open_mode]) fd_acm
+write$acm(fd fd_acm, buf buffer[in], count len[buf])
+read$acm(fd fd_acm, buf buffer[out], count len[buf])
+
+resource fd_serial[fd]
+open$serial_gadget(file ptr[in, string["/dev/ttyGS1"]], flags const[O_RDWR], mode flags[open_mode]) fd_serial
+open$serial_host(file ptr[in, string["/dev/ttyUSB0"]], flags const[O_RDWR], mode flags[open_mode]) fd_serial
+write$serial(fd fd_serial, buf buffer[in], count len[buf])
+read$serial(fd fd_serial, buf buffer[out], count len[buf])
