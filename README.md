@@ -27,6 +27,9 @@ $ ln -s [target_kernel_dir] target
 ```
 * apply kernel patch: `patch/kernel/README`
 * kernel build with gadget enabled config (e.g., `kernel/config`)
+```
+$ ./scripts/build_kern.sh
+```
 
 #### disk image setup
 * initial setup within the image
