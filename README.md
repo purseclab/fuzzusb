@@ -32,11 +32,15 @@ $ ./scripts/build_kern.sh
 ```
 
 #### disk image setup
-* initial setup within the image
+* disk image symlink setup
+```
+$ ln -s [target_disk_image] disk/disk.img
+```
+* additional setup within the image
 ```
 $ apt install python3 usbutils alsa-utils net-tools rsync
 ```
-* copy to the image: `state_mgr.py` 
+* copy files to the image: `to_disk/state_mgr.py` 
 
 ### Run 
 ```
