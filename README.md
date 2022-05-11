@@ -34,7 +34,8 @@ $ ./scripts/build_kern.sh
 #### disk image setup
 * disk image symlink setup
 ```
-$ ln -s [target_disk_image] disk/disk.img
+$ cd disk
+$ ln -s [target_disk_image] disk.img
 ```
 * additional setup within the image
 ```
